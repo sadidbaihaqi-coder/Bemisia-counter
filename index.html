@@ -85,8 +85,10 @@ canvas.addEventListener('pointerdown',e=>{
  const p=getPoint(e);
  if(manualMode){
   snapshot();
-  const r=canvas.getBoundingClientRect();
-  const bw=Math.min(24/Math.max(1,r.width),.08),bh=Math.min(24/Math.max(1,r.height),.08);
+  // Match the default manual box to the typical automatic-candidate size in source-image pixels.
+  // Use the same normalized size as an 8×8 source-pixel candidate, scaled by the original image dimensions.
+  const bw=Math.min(8/Math.max(1,img.naturalWidth),.08);
+  const bh=Math.min(8/Math.max(1,img.naturalHeight),.08);
   marks.push({uid:nextId(),x:p.x,y:p.y,w:bw,h:bh,source:'manual'});
   draw();say('Kotak manual ditambahkan. Jumlah: '+marks.length);e.preventDefault();return;
  }
