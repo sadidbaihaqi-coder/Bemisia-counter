@@ -1,0 +1,65 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#e3c84d"><title>Bemisia Counter — Prototipe</title><style>
+:root{--yellow:#e3c84d;--ink:#252719;--muted:#687064;--line:#e4e2d7;--green:#356b45;--red:#b33c32}*{box-sizing:border-box}body{margin:0;background:#f3f2eb;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{background:var(--yellow);padding:18px 16px 16px;padding-top:calc(18px + env(safe-area-inset-top));border-bottom:1px solid #c8b13c}header .eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.75}h1{font-size:25px;margin:5px 0 4px;letter-spacing:-.04em}header p{margin:0;font-size:13px;max-width:520px;line-height:1.4}main{max-width:820px;margin:auto;padding:14px 12px 34px;display:grid;gap:12px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 2px 8px #1b1b1010}.card h2{font-size:16px;margin:0 0 12px}.muted{color:var(--muted);font-size:12px;line-height:1.45}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:100px}label{font-size:12px;font-weight:700;display:block;margin-bottom:6px}select,input[type=text],input[type=date]{width:100%;padding:11px;border:1px solid #d6d5c9;border-radius:10px;background:#fff;font-size:15px;color:var(--ink)}button,.filebtn{border:0;border-radius:11px;padding:12px 13px;font-weight:750;font-size:14px;background:var(--ink);color:white;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}button.secondary{background:#efeee5;color:var(--ink);border:1px solid var(--line)}button.green{background:var(--green)}button.danger{background:#fae9e6;color:var(--red);border:1px solid #f0cbc5}button:disabled{opacity:.4;cursor:not-allowed}.filebtn{background:var(--yellow);color:var(--ink);width:100%;margin-top:10px}.file-input-wrap{padding:12px;border:1px solid var(--line);border-radius:12px;background:#faf9f3}.file-input-wrap label{display:block;margin-bottom:8px;font-size:13px}.file-input-wrap input[type=file]{display:block;width:100%;font-size:13px;color:var(--ink)}#photoWrap{position:relative;display:none;margin-top:12px;background:#f5f4ee;border-radius:12px;overflow:hidden;touch-action:manipulation}#photo{display:block;width:100%;height:auto;max-height:62vh;object-fit:contain;cursor:crosshair}#overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}#empty{border:1.5px dashed #d3d1c4;background:#faf9f3;border-radius:12px;text-align:center;padding:28px 14px}.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{padding:12px;background:#f8f7f0;border-radius:11px}.stat b{display:block;font-size:20px}.stat span{font-size:11px;color:var(--muted)}.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.controls button{width:100%}.status{padding:9px 10px;border-radius:9px;background:#fff7d8;font-size:12px;line-height:1.4;margin-top:10px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:700}td:last-child,th:last-child{text-align:right}.tablewrap{overflow-x:auto}@media(min-width:700px){main{grid-template-columns:1fr 1fr;align-items:start}main .wide{grid-column:1/-1}}
+</style></head><body><header><div class="eyebrow">Prototipe uji lapangan · v0.1</div><h1>🐞 Bemisia Counter</h1><p>Penghitungan perangkap kuning dengan penandaan dan koreksi manual. Dirancang untuk alur kerja 40 trap di greenhouse.</p></header><main>
+<section class="card"><h2>1. Data pengamatan</h2><div class="row"><div><label for="trapId">ID perangkap (bisa diketik)</label><input id="trapId" type="text" list="trapSuggestions" value="T01" placeholder="Contoh: GH16-T01"><datalist id="trapSuggestions"></datalist></div><div><label for="obsDate">Tanggal pengamatan</label><input id="obsDate" type="date"></div></div><div style="margin-top:12px"><label for="note">Catatan (opsional)</label><input id="note" type="text" placeholder="Contoh: GH16, sisi utara"></div></section>
+<section class="card"><h2>2. Foto perangkap</h2><div id="empty"><div style="font-size:30px">📷</div><b>Pilih foto yellow sticky trap</b><p class="muted">Gunakan foto asli dengan fokus tajam dan pencahayaan merata.</p></div><div class="file-input-wrap"><label for="upload">Ambil foto dengan kamera atau pilih satu gambar dari galeri</label><input id="upload" type="file" accept="image/*"></div>
+<div class="file-input-wrap" style="margin-top:10px"><label for="importImages">Impor beberapa gambar dari galeri</label><input id="importImages" type="file" accept="image/*" multiple></div><p class="muted" style="margin-bottom:0">Gunakan pemilih berkas iPhone di atas. Untuk galeri, pilih Photos/Foto jika ditawarkan, atau pilih foto yang tersimpan di aplikasi Files.</p><div id="photoWrap"><img id="photo" alt="Foto perangkap"><canvas id="overlay"></canvas></div><div class="status" id="instruction">Setelah foto dimuat, ketuk posisi setiap individu yang ingin ditandai. Ketuk tanda untuk menghapusnya. Penandaan ini masih manual—AI belum dihubungkan.</div></section>
+<section class="card"><h2>3. Hitungan perangkap aktif</h2><div class="statgrid"><div class="stat"><span>Jumlah tanda</span><b id="count">0</b></div><div class="stat"><span>Perangkap tersimpan</span><b id="savedCount">0/40</b></div><div class="stat"><span>Metode</span><b style="font-size:14px">Manual</b></div></div><div class="controls"><button id="undo" class="secondary" disabled>↶ Hapus tanda terakhir</button><button id="clear" class="danger" disabled>Hapus semua tanda</button><button id="save" class="green">Simpan hitungan</button><button id="export" class="secondary">Ekspor CSV</button></div><p class="muted" style="margin-bottom:0">Hitung hanya objek yang telah kamu identifikasi sebagai Bemisia. Tanda pada foto adalah alat bantu pencatatan, bukan hasil deteksi AI.</p></section>
+<section class="card wide"><div class="row" style="align-items:center"><div><h2 style="margin-bottom:4px">4. Rekap pengamatan</h2><div class="muted">Data tersimpan sementara di halaman ini. Ekspor CSV untuk menyimpan salinan.</div></div><button id="clearAll" class="danger" style="flex:0 0 auto">Hapus rekap</button></div><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>ID</th><th>Tanggal</th><th>Jumlah</th><th>Catatan</th><th></th></tr></thead><tbody id="records"><tr><td colspan="5" class="muted">Belum ada hitungan yang disimpan.</td></tr></tbody></table></div></section>
+<section class="card wide"><h2>Yang belum aktif pada v0.1</h2><p class="muted" style="margin:0">Deteksi AI otomatis belum terpasang. Langkah berikutnya adalah mengumpulkan foto yang telah diberi kotak/label individu, melatih atau mengadaptasi model deteksi whitefly, lalu menampilkan prediksi AI sebagai tanda yang bisa dikoreksi. Prototipe ini menguji alur foto → penandaan → hitungan → ekspor, bukan mengklaim hitungan otomatis.</p></section></main><footer style="text-align:center;padding:0 18px 22px;color:#687064;font-size:11px;line-height:1.5">Prototipe untuk pengujian alur kerja. Jika pemilih foto tidak terbuka saat file dibuka di pratinjau Files, simpan file lalu buka melalui Safari. Jangan gunakan hitungan manual ini sebagai hasil AI atau data tervalidasi tanpa pemeriksaan.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const trap=$('trapId'),img=$('photo'),wrap=$('photoWrap'),canvas=$('overlay'),ctx=canvas.getContext('2d');
+const suggestions=$('trapSuggestions');
+if(suggestions){for(let i=1;i<=40;i++){const o=document.createElement('option');o.value='T'+String(i).padStart(2,'0');suggestions.appendChild(o)}}
+$('obsDate').value=new Date().toLocaleDateString('en-CA');
+let marks=[],records=[],queue=[],queueIndex=0;
+function say(s){$('instruction').textContent=s}
+function countUI(){$('count').textContent=String(marks.length);$('undo').disabled=!marks.length;$('clear').disabled=!marks.length}
+function draw(){
+ if(!img.naturalWidth)return;
+ const r=img.getBoundingClientRect(),w=r.width,h=r.height,d=window.devicePixelRatio||1;
+ canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);canvas.style.width=w+'px';canvas.style.height=h+'px';
+ ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);
+ marks.forEach((m,i)=>{const x=m.x*w,y=m.y*h;ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fillStyle='#00a86b';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.fillStyle='#062c1b';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(i+1),x,y)});
+ countUI();
+}
+function loadFile(file){
+ if(!file){say('Belum ada gambar yang dipilih.');return}
+ marks=[];countUI();say('Memuat gambar: '+file.name+' …');
+ const reader=new FileReader();
+ reader.onerror=()=>say('Gagal membaca file. Coba pilih foto JPG/PNG dari aplikasi Foto atau Files.');
+ reader.onload=()=>{
+   img.onload=()=>{ $('empty').style.display='none';wrap.style.display='block';wrap.style.minHeight='120px';requestAnimationFrame(draw);say('Gambar berhasil dimuat. Ketuk posisi setiap Bemisia pada foto. Titik hijau bernomor akan muncul dan jumlah berubah otomatis.')};
+   img.onerror=()=>say('File terbaca, tetapi gambar tidak dapat ditampilkan. Coba ekspor foto sebagai JPG.');
+   img.src=reader.result;
+ };
+ reader.readAsDataURL(file);
+}
+$('upload').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(f){queue=[];loadFile(f)}else say('Tidak ada gambar dipilih.')});
+$('importImages').addEventListener('change',e=>{const fs=Array.from(e.target.files||[]);if(!fs.length){say('Tidak ada gambar dipilih.');return}queue=fs;queueIndex=0;loadQueued()});
+function loadQueued(){
+ const f=queue[queueIndex];if(!f)return;loadFile(f);trap.value=f.name.replace(/\.[^.]+$/,'');
+ say('Memuat foto '+(queueIndex+1)+' dari '+queue.length+': '+f.name+'. Setelah foto tampil, tandai individu lalu simpan.');
+ let b=$('nextImage');if(!b){b=document.createElement('button');b.id='nextImage';b.className='secondary';b.style.width='100%';b.style.marginTop='8px';b.textContent='Foto berikutnya →';$('importImages').insertAdjacentElement('afterend',b);b.onclick=()=>{if(queueIndex<queue.length-1){queueIndex++;loadQueued()}else say('Semua foto impor sudah dibuka.')}}
+}
+function mark(e){
+ if(!img.naturalWidth){say('Pilih gambar sampai foto tampil terlebih dahulu.');return}
+ const r=img.getBoundingClientRect(),x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));
+ let hit=-1,best=.025;marks.forEach((m,i)=>{const dist=Math.hypot(m.x-x,m.y-y);if(dist<best){best=dist;hit=i}});
+ if(hit>=0){marks.splice(hit,1);say('Titik dihapus. Jumlah sekarang: '+marks.length)}else{marks.push({x,y});say('Titik ditambahkan. Jumlah sekarang: '+marks.length)}
+ draw();
+}
+wrap.addEventListener('click',e=>{if(e.target===canvas||e.target===img)mark(e)});
+$('undo').onclick=()=>{marks.pop();draw();say('Tanda terakhir dihapus. Jumlah: '+marks.length)};
+$('clear').onclick=()=>{if(confirm('Hapus semua titik?')){marks=[];draw();say('Semua tanda dihapus.')}};
+function refresh(){
+ $('savedCount').textContent=records.length+'/40';const body=$('records');body.innerHTML='';
+ if(!records.length){body.innerHTML='<tr><td colspan="5" class="muted">Belum ada hitungan yang disimpan.</td></tr>';return}
+ records.slice().sort((a,b)=>a.id.localeCompare(b.id)).forEach(r=>{const tr=document.createElement('tr');[r.id,r.date,String(r.count),r.note||'—'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});const td=document.createElement('td'),b=document.createElement('button');b.textContent='Hapus';b.className='danger';b.style.padding='6px 8px';b.onclick=()=>{records=records.filter(x=>!(x.id===r.id&&x.date===r.date));refresh()};td.appendChild(b);tr.appendChild(td);body.appendChild(tr)})
+}
+$('save').onclick=()=>{const id=trap.value.trim();if(!id){alert('Isi ID perangkap terlebih dahulu.');return}const r={id,date:$('obsDate').value||'',count:marks.length,note:$('note').value.trim()};const i=records.findIndex(x=>x.id===r.id&&x.date===r.date);if(i>=0)records[i]=r;else records.push(r);refresh();say('Hitungan tersimpan: '+id+' = '+marks.length+' titik manual.')};
+$('export').onclick=()=>{if(!records.length){alert('Belum ada hitungan untuk diekspor.');return}const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const rows=[['ID perangkap','Tanggal','Jumlah titik manual','Catatan'],...records.map(r=>[r.id,r.date,r.count,r.note])];const csv='\ufeff'+rows.map(row=>row.map(q).join(',')).join('\r\n');const a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.href=url;a.download='Bemisia_Counter_rekap.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('clearAll').onclick=()=>{if(confirm('Hapus seluruh rekap?')){records=[];refresh()}};
+window.addEventListener('resize',draw);
+</script></body></html>
