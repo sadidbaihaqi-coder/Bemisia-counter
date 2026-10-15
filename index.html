@@ -112,7 +112,9 @@ $('autoDetect').onclick=()=>{
  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){
   const k=y*W+x,p=k*4,r=data[p],g=data[p+1],b=data[p+2];
   const hsv=rgbToHsv(r,g,b);
-  if(hsv.v>.62 && hsv.s<.43 && (r+g+b)/3>155){mask[k]=1}
+  // Prioritize clearly pale/white specks against the yellow card.
+  // This reduces yellow glare candidates but cannot identify species.
+  if(hsv.v>.72 && hsv.s<.30 && (r+g+b)/3>180){mask[k]=1}
  }
  const comps=[];
  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){
@@ -126,12 +128,12 @@ $('autoDetect').onclick=()=>{
    }
   }
   const bw=maxX-minX+1,bh=maxY-minY+1;
-  if(area>=minSize&&area<=maxSize*maxSize&&bw<=maxSize&&bh<=maxSize&&Math.max(bw,bh)/Math.max(1,Math.min(bw,bh))<=4){
+  if(area>=Math.max(minSize,5)&&area<=maxSize*maxSize&&bw>=2&&bh>=2&&bw<=maxSize&&bh<=maxSize&&Math.max(bw,bh)/Math.max(1,Math.min(bw,bh))<=2.8){
    comps.push({x:(sumX/area)/W,y:(sumY/area)/H,w:Math.max(bw/W,.006),h:Math.max(bh/H,.006),source:'auto'});
   }
  }
  snapshot();marks=comps.map((m,i)=>({...m,uid:i+1}));manualMode=false;$('manualMode').classList.remove('active');draw();
- say('Selesai: '+marks.length+' kandidat terdeteksi. Ini bukan hitungan Bemisia terverifikasi; klik kotak yang salah untuk menghapus, atau aktifkan tambah kotak manual untuk objek yang terlewat.');
+ say('Selesai: '+marks.length+' kandidat titik putih terdeteksi dengan filter lebih ketat. Sebagian kandidat masih bisa salah dan sebagian Bemisia bisa terlewat; koreksi manual tetap diperlukan.');
 };
 $('manualMode').onclick=()=>{manualMode=!manualMode;$('manualMode').classList.toggle('active',manualMode);say(manualMode?'Mode tambah kotak aktif: ketuk posisi objek yang terlewat untuk menambahkan kotak ukuran standar.':'Mode tambah kotak dimatikan. Klik kotak untuk menghapus kandidat yang salah.');draw()};
 $('minSize').oninput=()=>{$('minSizeVal').textContent=$('minSize').value};
